@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
+
+import ChatBox from '../views/box-chat-widget/ChatWidget'
+import PaginaDashboard from '../views/PaginaDashboard.vue'
 import PaginaHome from '../views/Home.vue'
 import PaginaLogin from '../views/Login.vue'
 import PaginaLogout from '../views/Logout.vue'
-import PaginaDashboard from '../views/PaginaDashboard.vue'
 
 const routes = [
   {
@@ -17,6 +19,13 @@ const routes = [
     path: '/login',
     name: 'login',
     component: PaginaLogin,
+  },
+  {
+    path: '/pages/:page_id/box-chat-widget',
+    name: 'box',
+    component: ChatBox, 
+    meta: { authOnly: true },
+    props: true,
   },
   {
     path: '/logout',
@@ -35,7 +44,7 @@ const routes = [
 ]
 
 function isLoggedIn() {
-  return localStorage.getItem("authOnly")
+  return localStorage.getItem("accessToken")
 }
 
 const router = createRouter({
@@ -47,7 +56,7 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.authOnly)) {
     if (!isLoggedIn()) {
       next({
-        path: "/login",
+        name: "login",
         query: { redirect: to.fullPath }
       });
     } else {

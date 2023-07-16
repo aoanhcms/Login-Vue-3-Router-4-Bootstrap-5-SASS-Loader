@@ -1,19 +1,21 @@
-import { createApp } from 'vue'
+import './assets/scss/_main.scss'
+import './libs'
+
 import App from './App.vue'
-import router from './router'
-
-import 'bootstrap/dist/css/bootstrap.css'
-import bootstrap from 'bootstrap/dist/js/bootstrap'
-
 import VueSweetalert2 from 'vue-sweetalert2';
+import axios from './libs/axios'
+import { createApp } from 'vue'
+import router from './router'
+import store from './store';
 
 const VueSweetalert2Options = {
   confirmButtonColor: '#41b882',
   cancelButtonColor: '#ff7674',
 };
 
-createApp(App)
-  .use(router)
-  .use(bootstrap)
+let app = createApp(App)
+app.config.globalProperties.axios = axios
+
+app.use(router).use(store)
   .use(VueSweetalert2, VueSweetalert2Options)
   .mount('#app')

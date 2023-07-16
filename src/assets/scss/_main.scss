@@ -1,26 +1,98 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;900&display=swap');
-@import './colors';
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  #app {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    .chat-box {
+      height: 100vh;
+      .chat-footer {
+        .chat-action {
+          width: 100%;
+          box-sizing: border-box;
+          border-top: 1px solid #ccc;
+          display: flex;
+          .input, .input:focus-visible, .input:focus:not(:focus-visible), .input:focus {
+            flex: 6;
+            background: none;
+            border: .1rem solid #fff;
+            color: #000;
+          }
+          .submit{
+            flex: 1;
+          }
+        }
+        .chat-copyright {
+          color:rgba(34, 34, 34, 0.8);
+          font-size: .7rem;
+          text-align: center;
+        }
+      }
+      .chat-container {
+        flex: 1;
+        height: 90%;
+        overflow-y: scroll;
+        box-sizing: border-box;
+        .messageList {
+          padding: 4px;
+          color: #fff;
+          margin-top: 2px;
+          .messages {
+            padding: 4px;
+            border-radius: 10px;
+          }
+        }
+        .sent {
+          flex-direction: row-reverse;
+          text-align: right;
+          background-color: #ccc;
+          color: #4c5958;
+        }
+        .received {
+          background-color: #374f71;
+        }
+        .sent, .received {
+          border-radius: 10px;
+        }
+      }
+    
+      .chat-container::-webkit-scrollbar {
+        width: 8px;
+      }
+      .chat-container::-webkit-scrollbar-thumb {
+        background-color: rgba(0,0,0, .3);
+      }
+      .chat-container::-webkit-scrollbar-track {
+        background-color: #f1f1f1;
+        border-radius:4px;
+      }
+      .chat-container::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(0,0,0, .5);
+      }
+    
+    }
 
-.main{
-    font-family: 'Roboto', sans-serif;
-}
-#app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-}
-
-nav {
-padding: 30px;
-}
-
-nav a {
-font-weight: bold;
-color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-color: #42b983;
-}
+    
+    .login {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 10px;
+      margin: 10px auto;
+      vertical-align: middle;
+      
+      .form-control {
+        margin-bottom: 5px;
+      }
+      .notification {
+        padding: 10px;
+      }  
+    }
+  }
