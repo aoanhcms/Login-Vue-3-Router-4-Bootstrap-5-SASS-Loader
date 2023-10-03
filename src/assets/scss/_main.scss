@@ -20,8 +20,9 @@ html, body {
           .input, .input:focus-visible, .input:focus:not(:focus-visible), .input:focus {
             flex: 6;
             background: none;
-            border: .1rem solid #fff;
+            border: .1rem solid #b2bbb4;
             color: #000;
+            outline: none!important;
           }
           .submit{
             flex: 1;
@@ -38,6 +39,11 @@ html, body {
         height: 90%;
         overflow-y: scroll;
         box-sizing: border-box;
+        position: relative;
+        .chat-typing {
+          position: absolute;
+          bottom: 0;
+        }
         .messageList {
           padding: 4px;
           color: #fff;
@@ -45,6 +51,9 @@ html, body {
           .messages {
             padding: 4px;
             border-radius: 10px;
+            .status {
+              font-size: 10px;
+            }
           }
         }
         .sent {

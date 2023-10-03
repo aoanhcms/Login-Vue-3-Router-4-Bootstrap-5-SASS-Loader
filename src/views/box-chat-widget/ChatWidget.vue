@@ -6,8 +6,10 @@
           <div :className="message.type === 'received' ? 'messages received' : 'messages sent'">
             <div className="fullname" v-if="message.type === 'received'">{{ message.author}}</div>
             <div className="message">{{ message.data.text}}</div>
+            <div className="status">{{ message.status }}</div>
           </div>
         </div>
+        <div v-if="userTyping" class="chat-typing">...  ai đó đang chat</div>
       </div>
       <div className="chat-footer">
         <div class="chat-action">
@@ -29,10 +31,12 @@ export default {
   props: ['page_id'],
   data() {
     return {
+      sort: 0,//xắp xếp tin nhắn
       socket: null,
       room_id: localStorage.getItem('room_id'),
       app_id: null,
       refUrl: null,
+      userTyping: false,
       userData: JSON.parse(localStorage.getItem('userData')),
       newMessage: '',
       participants: [
@@ -86,7 +90,6 @@ export default {
   created() {
     this.reconnectWebsocket();
     //load messages first login
-    
   },
   mounted() {
     this.app_id = this.$route.query.app_id
@@ -94,14 +97,14 @@ export default {
   },
   methods: {
     typing() {
-      // this.sendSocket({
-      //   pageId : this.page_id,
-      //   userId : this.userData.id,
-      //   appId  : this.app_id,
-      //   ref     : this.ref,
-      //   type    : 'typing',
-      //   roomId : this.room_id
-      // })
+      this.sendSocket({
+        pageId : this.page_id,
+        userId : this.userData.id,
+        appId  : this.app_id,
+        ref     : this.ref,
+        type    : 'typing',
+        roomId : this.room_id
+      })
     },
     sendSocket(data) {
       if(this.socket.readyState === 1) {
@@ -115,12 +118,13 @@ export default {
       
       console.log('connected socket');
       this.sendSocket({
-        pageId : this.page_id,
-        userId : this.userData.id,
-        appId  : this.app_id,
-        ref     : this.ref,
-        type    : 'first_osiner',
-        roomId : this.room_id
+        pageId    : this.page_id,
+        userId    : this.userData._id,
+        userData  : this.userData,
+        appId     : this.app_id,
+        ref       : this.ref,
+        type      : 'first_osiner',
+        roomId    : this.room_id
       })
     },
     onSocketMessage(event) {
@@ -129,6 +133,7 @@ export default {
       switch(jsonData.type) {
         case 'messages' : {
           //lan dau
+          this.sort = jsonData.data.length
           this.messageList = jsonData.data.map((item) => {
             return {
               type: item.user_id !== this.page_id ? 'sent' : 'received',
@@ -143,6 +148,10 @@ export default {
         break
         case 'typing' : {
           //dang gửi tin nhắn
+          this.userTyping = true
+          setTimeout(() => {
+            this.userTyping = false
+          }, 5000)
         }
         break
         case 'leaving_room' : {
@@ -153,13 +162,23 @@ export default {
           console.log('list_message');
         }
         break
+        case 'status_message' : {
+          //sent, readed
+          let status = 'Đã gửi'
+          if(jsonData.status === 'readed') status = 'Đã đọc'
+          else if(jsonData.status === 'received') status = 'Đã nhận'
+          this.messageList = this.messageList.map((item) => {
+            return {...item, status: status}
+          })
+        }
+        break
         case 'added_message' : {
           //nhan tn nhan
           this.messageList.push({
-              type: 'received',
-              author: 'test',
+              type: jsonData.data.type,
+              author: jsonData.data.userData.name,
               data: {
-                text: jsonData.data
+                text: jsonData.data.text
               }
             })
             this.scrollToBottom()
@@ -200,20 +219,22 @@ export default {
     sendMessage () {
         this.newMessagesCount = this.isChatOpen ? this.newMessagesCount : this.newMessagesCount + 1
         let data = {
-          ...this.userData,
+          userData: this.userData,
           type: 'add_message', 
           roomId: this.room_id,
-          data: { text: this.newMessage },
-          pageId: "1",
-          userId: "1",
+          data: { text: this.newMessage, type: 'sent' },
+          pageId: this.page_id,
+          userId: this.userData._id,
+          sort: this.sort+1
         }
-        //this.onMessageWasSent(data)
+        this.onMessageWasSent(data)
         this.sendSocket(data)
         this.newMessage = ''
         this.scrollToBottom()
     },
     onMessageWasSent (message) {
       // called when the user sends a message
+      this.sort++
       this.messageList = [ ...this.messageList, message ]
     },
     openChat () {
@@ -240,17 +261,19 @@ export default {
     scrollToBottom() {
         this.$nextTick(() => {
             const chatContainer = this.$refs.chatContainer;
-            chatContainer.scrollTop = chatContainer.scrollHeight? chatContainer.scrollHeight: 0
+            if(typeof chatContainer !== 'undefined')
+            chatContainer.scrollTop = chatContainer.scrollHeight ? chatContainer.scrollHeight: 0
         });
     },
     startButton() {
       //
       console.log('startButton');
+      this.messageList = []
       this.sendSocket({
         type: 'start_osiner',
         appId: this.app_id,
         pageId: this.page_id,
-        userId : this.userData.id,
+        userId : this.userData._id,
       })
     }
   }

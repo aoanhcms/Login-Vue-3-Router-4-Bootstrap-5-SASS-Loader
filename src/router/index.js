@@ -18,6 +18,7 @@ const routes = [
   {
     path: '/login',
     name: 'login',
+    props: true,
     component: PaginaLogin,
   },
   {
@@ -30,6 +31,7 @@ const routes = [
   {
     path: '/logout',
     name: 'logout',
+    props: true,
     component: PaginaLogout,
   },
   /*****************************
@@ -38,6 +40,7 @@ const routes = [
   {
     path: '/dashboard',
     name: 'dashboard',
+    props: true,
     component: PaginaDashboard, 
     meta: { authOnly: true }
   },
@@ -55,6 +58,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.authOnly)) {
     if (!isLoggedIn()) {
+      console.log('to.fullPath', to.fullPath);
       next({
         name: "login",
         query: { redirect: to.fullPath }

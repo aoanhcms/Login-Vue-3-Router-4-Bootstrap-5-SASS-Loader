@@ -22,31 +22,39 @@
 
 <script>
 import Swal from 'sweetalert2';
-
+import queryStr from '../libs/queryStr'
 export default {
     name: 'LoginComponent',
-    components: {
-    },
     data() {
         return {
             form: {
                 email: "",
                 password: "",
+                with_room_id: true,
+                page_id: "",
             },
             error: "",
             data: [],
         }
     },
+    created() {
+console.log('thí.props', queryStr(this.$route.query.redirect));
+        
+    },
+    mounted() {
+        
+    },
     methods: {
         login() {
-          this.axios.post('/auth/login', this.form)
+            this.form.page_id = queryStr(this.$route.query.redirect).page_id
+            this.axios.post('/auth/login', this.form)
             .then((res) => {
-                console.log('res', res);
                 if(res.accessToken) {
                     this.$root.$emit("login", true);
                     localStorage.setItem('accessToken', res.accessToken);
+                    localStorage.setItem('roomId', res.roomId);
                     localStorage.setItem('userData', JSON.stringify(res.userData));
-                    this.$router.push({name: 'box', params: {page_id: 25}});
+                    this.$router.push(this.$route.query.redirect);
                 }else {
                     Swal.fire({
                         title: 'OPPS',
