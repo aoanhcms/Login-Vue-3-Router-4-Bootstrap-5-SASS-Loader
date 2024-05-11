@@ -26,7 +26,7 @@
     "url": "https://github.com/Tellys/Login-Vue-3-Router-4-Bootstrap-5-SASS-Loader"
   },
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --port 8081",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },

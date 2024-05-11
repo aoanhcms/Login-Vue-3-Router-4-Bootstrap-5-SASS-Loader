@@ -5,24 +5,38 @@ html, body {
   }
   
   #app {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important; 
     .chat-box {
-      height: 100vh;
+      height: 100vh !important;
+      display: flex !important;
+      flex-direction: column !important;
       .chat-footer {
+        flex: 1;
+        padding: 10px;
+        border-top: 1px solid #e3e3e3 !important;
         .chat-action {
           width: 100%;
           box-sizing: border-box;
-          border-top: 1px solid #ccc;
           display: flex;
           .input, .input:focus-visible, .input:focus:not(:focus-visible), .input:focus {
+            line-height: 20px;
+            resize: none;
             flex: 6;
             background: none;
-            border: .1rem solid #b2bbb4;
+            margin: 5px 0 5px 0;
             color: #000;
             outline: none!important;
+            overflow: auto !important;
+            font-size: 1.2em;
+            border: none;
+          }
+          .input-smile, .input-attach {
+            display: flex !important;
+            align-items: center !important;
+            margin: 5px;
           }
           .submit{
             flex: 1;
@@ -34,44 +48,82 @@ html, body {
           text-align: center;
         }
       }
+      .product-detail {
+        display: flex;
+        padding: 5px;
+        margin: 5px;
+        border-radius: 5px;
+        background-color: #e4e1e1;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        img {
+          flex: 1;
+          margin-right: 5px;
+          border-radius: 5px;
+        }
+        .info {
+          flex: 6;
+          font-size: .9rem;
+          .title {
+            display: -webkit-box; /* Dùng để tạo khung cắt */
+            -webkit-box-orient: vertical; /* Hướng của khung */
+            overflow: hidden; /* Ẩn văn bản bị tràn */
+            text-overflow: ellipsis; /* Thêm dấu ba chấm khi bị cắt */
+            -webkit-line-clamp: 2; /* Giới hạn số dòng trước khi cắt */
+          }
+          .price {
+            color: rgb(255, 0, 0);
+            font-weight: bold;
+          }
+        }
+      }
       .chat-container {
-        flex: 1;
-        height: 90%;
-        overflow-y: scroll;
-        box-sizing: border-box;
-        position: relative;
+        flex: 9;
+        box-sizing: border-box !important;
+        position: relative !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        
         .chat-typing {
-          position: absolute;
-          bottom: 0;
+          position: absolute !important;
+          bottom: 0 !important;
         }
         .messageList {
-          padding: 4px;
-          color: #fff;
-          margin-top: 2px;
+          padding: 4px !important;
+          color: #fff !important;
+          margin-top: 2px !important;
           .messages {
-            padding: 4px;
-            border-radius: 10px;
+            padding: 4px !important;
+            border-radius: 10px !important;
             .status {
-              font-size: 10px;
+              font-size: 10px !important;
             }
           }
         }
         .sent {
-          flex-direction: row-reverse;
-          text-align: right;
-          background-color: #ccc;
-          color: #4c5958;
+          flex-direction: row-reverse !important;
+          text-align: right !important;
+          color: #4c5958 !important;
+          .messages {
+
+            display: inline-block;
+            background-color: #eeeeee !important;
+          }
         }
         .received {
-          background-color: #374f71;
+          .messages {
+
+            display: inline-block;
+            background-color: #374f71 !important;
+          }
         }
         .sent, .received {
-          border-radius: 10px;
+          border-radius: 10px !important;
         }
       }
     
       .chat-container::-webkit-scrollbar {
-        width: 8px;
+        width: 8px !important;
       }
       .chat-container::-webkit-scrollbar-thumb {
         background-color: rgba(0,0,0, .3);
@@ -89,17 +141,49 @@ html, body {
     
     .login {
       display: flex;
-      align-items: center;
-      justify-content: center;
       flex-direction: column;
-      text-align: center;
-      padding: 10px;
-      margin: 10px auto;
       vertical-align: middle;
-      
+      padding: 10px 10px 10px 10px;
       .form-control {
         margin-bottom: 5px;
+        border: 1px solid #e0e0e0;
+        border-radius: 25px;
+        padding-bottom: 5px;
+        padding-top: 5px;
       }
+      .input  {
+        width: 100%;
+      }
+      .btn {
+        background: rgb(0, 104, 200); color: rgb(255, 255, 255); width: 100%;
+      }
+      //channel
+      .channel_block {
+        margin-top: 5px;
+        .channel_block_inner {
+          padding: 15px 20px;
+          box-shadow: 0 2px 10px 0 rgb(0 0 0 / 12%);
+          .channel-item {
+            width: 50%;
+            float: left;
+            margin-bottom: 15px;
+            a {
+              text-decoration: none;
+              color: #44566C;
+              line-height: 1.34;
+              font-size: 13px;
+              img {
+                width: 28px;
+                height: 28px;
+                vertical-align: middle;
+                margin-right: 10px;
+                border-radius: 8px;
+              }
+            }
+          }
+        }
+      }
+      //channel
       .notification {
         padding: 10px;
       }  
